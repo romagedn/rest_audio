@@ -56,22 +56,13 @@ def correctText2Chinese(s:str):
     s = s.replace(')', '}')
     s = s.replace('[', '【')
     s = s.replace(']', '】')
-    s = lm_find_chinese(s)
+    # s = lm_find_chinese(s)
+    s = lm_find_chinese_and_symbol(s)
 
-    s = s.replace('，', '$')
-    s = s.replace('。', '$')
-    s = s.replace('；', '$')
-    s = s.replace('：', '$')
-    s = s.replace('“', '$')
-    s = s.replace("‘", '$')
-    s = s.replace('？', '$')
-    s = s.replace('！', '$')
-    s = s.replace('（', '$')
-    s = s.replace('}', '$')
-    s = s.replace('【', '$')
-    s = s.replace('】', '$')
+    chinese_punctuation = get_chinese_punctuation()
+    for c in chinese_punctuation:
+        s = s.replace(c, '$')
 
-    s = s.replace('\n', '$')
     return s
 
 
@@ -83,6 +74,7 @@ def correct_text(text, max_length=60):
         _text = text[:max_length]
         text = text[max_length:]
         texts.append(_text)
+    texts.append(text)
     return texts
 
 
@@ -100,28 +92,30 @@ def build():
         sample_file = content['sample_file']
         message = content['message']
 
+        texts = correct_text(message)
+
         filename_sample_audio = os.path.join(task_folder, sample_file)
         model = hub.Module(name='lstm_tacotron2',
                            output_dir=output_folder,
                            speaker_audio=filename_sample_audio)  # 指定目标音色音频文件
 
         # 使用generate()函数得到最终合成语音
-        texts = correct_text(message)
         wavs = model.generate(texts, use_gpu=True)
 
         dsts = []
         for wav in wavs:
-            dst = filePath + baseName + '_{}.wav'.format(len(dsts))
-            dsts.append(dst)
-            UtilsFile.copyFile(wav, dst)
+            dst_wav = output_folder + baseName + '_{}.wav'.format(len(dsts))
+            UtilsFile.copyFile(wav, dst_wav)
+            UtilsFile.delFile(wav)
+            dsts.append(dst_wav)
 
         des = content.copy()
         des.update({
             'speech_texts': texts,
             'speech_wavs': dsts,
         })
-        dst = filePath + fileName
-        UtilsFile.writeFileLines(dst, [json.dumps(des)])
+        dst_des = output_folder + fileName
+        UtilsFile.writeFileLines(dst_des, [json.dumps(des)])
 
         print('done task', filePath)
 

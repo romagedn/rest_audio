@@ -21,10 +21,11 @@ import re
 from zhon.hanzi import punctuation
 from zhon.hanzi import characters
 
+
 def lm_find_unchinese(file):
     pattern = re.compile(r'[\u4e00-\u9fa5]')
-    unchinese = re.sub(pattern ,"" ,file)  # 排除汉字
-    unchinese = re.sub('[{}]'.format(punctuation) ,"" ,unchinese)  # 排除中文符号
+    unchinese = re.sub(pattern, "", file)  # 排除汉字
+    unchinese = re.sub('[{}]'.format(punctuation), "", unchinese)  # 排除中文符号
     # print("unchinese:",unchinese)
     return unchinese
 
@@ -32,12 +33,29 @@ def lm_find_unchinese(file):
 def lm_find_chinese(m_str):
     pattern = re.compile(r'[^\u4e00-\u9fa5]')
     chinese = re.sub(pattern, '', m_str)
-    print("chinese:" ,chinese)
+    # print("chinese:" ,chinese)
+    return chinese
+
+
+def get_chinese_punctuation():
+    chinese_punctuation = '＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､　、〃〈〉《》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏﹑﹔·！？｡。'
+    return chinese_punctuation
+
+
+def lm_find_chinese_and_symbol(m_str:str):
+    chinese_punctuation = get_chinese_punctuation()
+    regex = fr'[^\u4e00-\u9fa5 ^{chinese_punctuation}]'
+    pattern = re.compile(regex)
+    chinese = re.sub(pattern, '', m_str)
+    return chinese
+
 
 def lm_find_chinese_symbol(m_str):
-    t_symbol = re.findall("[{}]".format(punctuation) ,m_str)
-    print("chinese symbols:" ,t_symbol)
+    t_symbol = re.findall("[{}]".format(punctuation), m_str)
+    # print("chinese symbols:" ,t_symbol)
+    return t_symbol
 
+'''
 def lm_find_chinese_and_symbol(m_str):
     lm_find_unchinese(m_str)
     lm_find_chinese(m_str)
@@ -65,3 +83,4 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
+'''
