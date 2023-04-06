@@ -136,5 +136,7 @@ if __name__ == '__main__':
     task_folder = './_temp_/'
     output_folder = './_output_/'
 
-    texts, wavs = build()
+    result = build()
+    if result:
+        texts, wavs = result
 
