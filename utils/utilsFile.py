@@ -21,7 +21,7 @@ class UtilsFile:
         return os.remove(path)
 
     @staticmethod
-    def _copyFile(src, dst):
+    def copyFile(src, dst):
         open(dst, "wb").write(open(src, "rb").read())
 
     @staticmethod
@@ -38,7 +38,7 @@ class UtilsFile:
             src_name = os.path.join(srcPath, file)
             dst_name = os.path.join(dstPath, file)
             if os.path.isfile(src_name):
-                UtilsFile._copyFile(src_name, dst_name)
+                UtilsFile.copyFile(src_name, dst_name)
             else:
                 os.mkdir(dst_name)
                 UtilsFile._copyFolder2(src_name, dst_name)
