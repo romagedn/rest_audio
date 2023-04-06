@@ -120,23 +120,24 @@ def build():
         print('done task', filePath)
 
         deleteTask(filePath)
-        return [texts, wavs]
+        return des
 
     except:
+        print('wrong task', filePath)
         deleteTask(filePath)
         return None
 
 
 if __name__ == '__main__':
-    argument = Arguments()
-    print('command line')
-    print(argument.getCommandLine())
-    print('')
+    # argument = Arguments()
+    # print('command line')
+    # print(argument.getCommandLine())
+    # print('')
 
     task_folder = './_temp_/'
     output_folder = './_output_/'
 
-    result = build()
-    if result:
-        texts, wavs = result
+    des = build()
+    # if des:
+    #     print('done task', des)
 
