@@ -1,7 +1,7 @@
 /.idea
 /venv
 /_output_
-/_temp_
+/_task_
 /config.txt
 /__pycache__
 /utils/__pycache__

@@ -136,7 +136,7 @@ if __name__ == '__main__':
     # print(argument.getCommandLine())
     # print('')
 
-    task_folder = './_temp_/'
+    task_folder = './_task_/'
     output_folder = './_output_/'
 
     des = build()
