@@ -37,7 +37,7 @@ class ShellGuard:
 
 if __name__ == '__main__':
     argument = Arguments()
-    CMD = argument.getArgument('CMD', '')
+    CMD = argument.getArgument('CMD', '.\\venv\\Scripts\\activate.bat && python worker.py')
     WORKING_PATH = argument.getArgument('WORKING_PATH', './')
 
     print('parameter:')

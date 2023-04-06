@@ -102,6 +102,7 @@ def build():
         # 使用generate()函数得到最终合成语音
         wavs = model.generate(texts, use_gpu=True)
 
+        # copy 生成语音到 ouput 目录
         dsts = []
         for wav in wavs:
             dst_wav = output_folder + baseName + '_{}.wav'.format(len(dsts))
@@ -109,6 +110,7 @@ def build():
             UtilsFile.delFile(wav)
             dsts.append(dst_wav)
 
+        # 生成 ouput des
         des = content.copy()
         des.update({
             'speech_texts': texts,

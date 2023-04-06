@@ -3,3 +3,5 @@
 /_output_
 /_temp_
 /config.txt
+/__pycache__
+/utils/__pycache__
