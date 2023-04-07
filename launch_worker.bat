@@ -1,9 +1,11 @@
 echo start repeating worker
 echo off
 
-:_START_
+start .\venv\Scripts\python main.py
+
+:_BEGIN_
 
 .\venv\Scripts\python worker.py
 
-goto _START_
+goto _BEGIN_
 
