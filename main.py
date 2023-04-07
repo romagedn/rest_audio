@@ -5,7 +5,8 @@ import tornado.ioloop
 import tornado.httpserver
 
 from service.handler_updateAudio import Handler_updateAudio
-
+from utils.utilsFile import UtilsFile
+from worker import initFolder
 
 
 if __name__ == "__main__":
@@ -14,6 +15,7 @@ if __name__ == "__main__":
     print('waiting requesting ...')
     print('')
 
+    initFolder()
 
     print('\nservice is starting\n')
 

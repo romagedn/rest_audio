@@ -1,3 +1,7 @@
+import warnings
+warnings.filterwarnings("ignore", message="pkg_resources is deprecated as an API")
+
+
 import paddlehub as hub
 import os
 import json
@@ -130,6 +134,15 @@ def build():
         return None
 
 
+def initFolder():
+    task_folder = './_task_/'
+    output_folder = './_output_/'
+    if not UtilsFile.isPathExist(task_folder):
+        UtilsFile.createFolder(task_folder)
+    if not UtilsFile.isPathExist(output_folder):
+        UtilsFile.createFolder(output_folder)
+
+
 if __name__ == '__main__':
     # argument = Arguments()
     # print('command line')
@@ -138,6 +151,7 @@ if __name__ == '__main__':
 
     task_folder = './_task_/'
     output_folder = './_output_/'
+    initFolder()
 
     des = build()
     # if des:

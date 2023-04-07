@@ -1,4 +1,5 @@
 echo start repeating worker
+echo off
 
 :_START_
 
