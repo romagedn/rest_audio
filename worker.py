@@ -1,5 +1,10 @@
-import warnings
-warnings.filterwarnings("ignore", message="pkg_resources is deprecated as an API")
+# import warnings
+# warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore", category=DeprecationWarning)
+# warnings.filterwarnings("ignore", message="pkg_resources is deprecated as an API")
+# warnings.filterwarnings("ignore", message="pkg_resources.declare_namespace('mpl_toolkits')")
+# warnings.filterwarnings("ignore", message="pkg_resources.declare_namespace('google')")
+# warnings.filterwarnings("ignore", message="pkg_resources.declare_namespace('zope')")
 
 
 import paddlehub as hub
