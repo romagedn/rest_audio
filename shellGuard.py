@@ -20,14 +20,22 @@ class ShellGuard:
     def start(self):
         while True:
             print('starting a new task')
-            process = subprocess.Popen(self.cmd, cwd=self.workingPath, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            process = subprocess.Popen(
+                self.cmd,
+                cwd=self.workingPath,
+                # stdout=subprocess.PIPE,
+                # stderr=subprocess.PIPE,
+            )
 
             while True:
-                output = process.stdout.readline()
-                if output == '' and process.poll() is not None:
+                # output = process.stdout.readline()
+                # if output == '' and process.poll() is not None:
+                #     break
+                # if output:
+                #     print(output.strip())
+
+                if process.poll() is not None:
                     break
-                if output:
-                    print(output.strip())
 
             rc = process.poll()
             print('finish one task, return code', rc)
@@ -36,9 +44,9 @@ class ShellGuard:
 
 
 if __name__ == '__main__':
-    argument = Arguments()
-    CMD = argument.getArgument('CMD', '.\\venv\\Scripts\\activate.bat && python worker.py')
-    WORKING_PATH = argument.getArgument('WORKING_PATH', './')
+    # argument = Arguments()
+    WORKING_PATH = '.\\'
+    CMD = ['.\\venv\\Scripts\\activate.bat && python worker.py']
 
     print('parameter:')
     print('CMD', CMD)
