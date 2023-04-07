@@ -52,3 +52,8 @@ output structure has
     speech_texts: list of texts
 }
 + speech_files - sample wav
+
+
+run
+launch_worker.bat
+
