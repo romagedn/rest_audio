@@ -3,5 +3,4 @@
 /_output_
 /_task_
 /config.txt
-/__pycache__
-/utils/__pycache__
+__pycache__
