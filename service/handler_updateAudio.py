@@ -1,7 +1,7 @@
 import base64
 import json
 import logging
-
+import os
 import tornado.gen
 import tornado.web
 
@@ -58,7 +58,7 @@ class Handler_updateAudio(tornado.web.RequestHandler):
             UtilsFile.writeFileBinary(audio_filename, bytes_audio)
 
             des = {
-                'sample_file': audio_filename,
+                'sample_file': os.path.basename(audio_filename),
                 'message': message,
             }
             des_filename = task_folder + uid + '.txt'
