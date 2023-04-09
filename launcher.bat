@@ -5,7 +5,8 @@ echo off
 
 :_BEGIN_
 
-.\venv\Scripts\python worker.py
+call .\venv\Scripts\python worker.py
 
 goto _BEGIN_
 
+pause

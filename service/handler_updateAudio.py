@@ -8,12 +8,10 @@ import tornado.web
 from utils.responseHelper import ResponseHelper
 from utils.utilsFile import UtilsFile
 
+from worker import task_folder, output_folder
 
 class Handler_updateAudio(tornado.web.RequestHandler):
     initialized = False
-
-    task_folder = './_task_/'
-    output_folder = './_output_/'
 
     @tornado.gen.coroutine
     def get(self):
@@ -45,17 +43,25 @@ class Handler_updateAudio(tornado.web.RequestHandler):
                 self.finish()
                 return
 
+            if self.check_task(uid):
+                response = ResponseHelper.generateResponse(True)
+                response['complete'] = 0
+
+                self.write(json.dumps(response))
+                self.finish()
+                return
+
             # create a new task
             bytes_audio = base64.standard_b64decode(audio64)
 
-            audio_filename = Handler_updateAudio.task_folder + uid + '.wav'
+            audio_filename = task_folder + uid + '.wav'
             UtilsFile.writeFileBinary(audio_filename, bytes_audio)
 
             des = {
                 'sample_file': audio_filename,
                 'message': message,
             }
-            des_filename = Handler_updateAudio.task_folder + uid + '.txt'
+            des_filename = task_folder + uid + '.txt'
             UtilsFile.writeFileLines(des_filename, [json.dumps(des)])
 
             response = ResponseHelper.generateResponse(True)
@@ -88,7 +94,7 @@ class Handler_updateAudio(tornado.web.RequestHandler):
 
     def clear_output(self, uid):
         try:
-            des_filename = Handler_updateAudio.output_folder + uid + '.txt'
+            des_filename = output_folder + uid + '.txt'
             if UtilsFile.isPathExist(des_filename):
                 content = UtilsFile.readFileContent(des_filename)
                 cfg = json.loads(content)
@@ -96,7 +102,7 @@ class Handler_updateAudio(tornado.web.RequestHandler):
                 speech_texts = cfg['speech_texts']
 
                 for wav in speech_wavs:
-                    wav_filename = Handler_updateAudio.output_folder + wav
+                    wav_filename = output_folder + wav
                     if UtilsFile.isPathExist(wav_filename):
                         UtilsFile.delFile(wav_filename)
 
@@ -107,7 +113,7 @@ class Handler_updateAudio(tornado.web.RequestHandler):
 
 
     def check_output(self, uid):
-        des_filename = Handler_updateAudio.output_folder + uid + '.txt'
+        des_filename = output_folder + uid + '.txt'
         if UtilsFile.isPathExist(des_filename):
             try:
                 content = UtilsFile.readFileContent(des_filename)
@@ -117,10 +123,10 @@ class Handler_updateAudio(tornado.web.RequestHandler):
 
                 wavs_base64 = []
                 for wav in speech_wavs:
-                    wav_filename = Handler_updateAudio.output_folder + wav
+                    wav_filename = output_folder + wav
                     if UtilsFile.isPathExist(wav_filename):
                         bin = UtilsFile.readFileBinary(wav_filename)
-                        b64 = base64.encodebytes(bin)
+                        b64 = base64.standard_b64encode(bin).decode()
                         wavs_base64.append(b64)
 
                 return wavs_base64, speech_texts
@@ -130,3 +136,10 @@ class Handler_updateAudio(tornado.web.RequestHandler):
 
         return None, None
 
+
+    def check_task(self, uid):
+        des_filename = task_folder + uid + '.txt'
+        if UtilsFile.isPathExist(des_filename):
+            return True
+
+        return False

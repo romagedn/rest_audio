@@ -1,4 +1,4 @@
-# import warnings
+import warnings
 # warnings.filterwarnings("ignore")
 # warnings.filterwarnings("ignore", category=DeprecationWarning)
 # warnings.filterwarnings("ignore", message="pkg_resources is deprecated as an API")
@@ -6,15 +6,26 @@
 # warnings.filterwarnings("ignore", message="pkg_resources.declare_namespace('google')")
 # warnings.filterwarnings("ignore", message="pkg_resources.declare_namespace('zope')")
 
+_sys_showwarning = warnings.showwarning
+def _new_showwarning(message, category, filename, lineno, file=None, line=None):
+    if category == DeprecationWarning or 'deprecated' in message:
+        return
+    _sys_showwarning(message, category, filename, lineno, file, line)
+warnings.showwarning = _new_showwarning
 
-import paddlehub as hub
+
 import os
+import paddlehub as hub
 import json
 
 from textHelper import *
 from utils.arguments import Arguments
 from utils.utilsFile import UtilsFile
 from utils.utilsTime import UtilsTime
+
+
+task_folder = './_task_/'
+output_folder = './_output_/'
 
 
 def findNextTask(path):
@@ -48,7 +59,8 @@ def deleteTask(filePath):
             if UtilsFile.isPathExist(sample_file):
                 UtilsFile.delFile(sample_file)
             UtilsFile.delFile(filePath)
-    except:
+    except Exception as e:
+        print(e)
         print('fail to delete task', filePath)
 
 
@@ -117,7 +129,7 @@ def build():
             dst_wav = output_folder + baseName + '_{}.wav'.format(len(dsts))
             UtilsFile.copyFile(wav, dst_wav)
             UtilsFile.delFile(wav)
-            dsts.append(dst_wav)
+            dsts.append(os.path.basename(dst_wav))
 
         # 生成 ouput des
         des = content.copy()
@@ -133,15 +145,14 @@ def build():
         deleteTask(filePath)
         return des
 
-    except:
+    except Exception as e:
+        print(e)
         print('wrong task', filePath)
         deleteTask(filePath)
         return None
 
 
 def initFolder():
-    task_folder = './_task_/'
-    output_folder = './_output_/'
     if not UtilsFile.isPathExist(task_folder):
         UtilsFile.createFolder(task_folder)
     if not UtilsFile.isPathExist(output_folder):
@@ -154,10 +165,7 @@ if __name__ == '__main__':
     # print(argument.getCommandLine())
     # print('')
 
-    task_folder = './_task_/'
-    output_folder = './_output_/'
     initFolder()
-
     des = build()
     # if des:
     #     print('done task', des)
