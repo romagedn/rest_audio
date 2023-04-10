@@ -56,8 +56,8 @@ def deleteTask(filePath):
             content = json.loads(content)
             sample_file = content['sample_file']
             message = content['message']
-            if UtilsFile.isPathExist(sample_file):
-                UtilsFile.delFile(sample_file)
+            if UtilsFile.isPathExist(output_folder + sample_file):
+                UtilsFile.delFile(output_folder + sample_file)
             UtilsFile.delFile(filePath)
     except Exception as e:
         print(e)
